@@ -38,13 +38,13 @@ const Attendance = () => {
   };
 
   return (
-    <Container maxWidth="md" sx={{ mt: 4 }}>
-      <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold", color: "#1976d2" }}>
+    <Container maxWidth="md" sx={{ mt: 4, color: "text.primary" }} className="dark:bg-gray-900 dark:text-white p-4 rounded-lg">
+      <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold" }} className="dark:text-white">
         Welcome, Student
       </Typography>
 
-      <Typography variant="h6">Class: COE-218 (1) 2019</Typography>
-      <Typography variant="h6">Number of Classes Conducted: {attendanceData.length}</Typography>
+      <Typography variant="h6" className="dark:text-gray-300">Class: 12 2025</Typography>
+      <Typography variant="h6" className="dark:text-gray-300">Number of Classes Conducted: {attendanceData.length}</Typography>
 
       <Grid container spacing={2} sx={{ mt: 2 }}>
         {attendanceData.map((entry) => (
@@ -56,10 +56,15 @@ const Attendance = () => {
                 alignItems: "center",
                 justifyContent: "center",
                 padding: 1,
-                border: "1px solid #ccc",
+                border: "1px solid",
+                borderColor: "divider",
+                bgcolor: "background.paper",
               }}
+              className="dark:bg-gray-800 dark:border-gray-700"
             >
-              <Typography variant="body2" sx={{ fontWeight: "bold" }}>{entry.student_id}</Typography>
+              <Typography variant="body2" sx={{ fontWeight: "bold" }} className="dark:text-gray-200">
+                {entry.student_id}
+              </Typography>
               <Button
                 variant="contained"
                 size="small"
@@ -75,6 +80,7 @@ const Attendance = () => {
                       entry.status === "X" ? "darkred" : "darkgray",
                   },
                 }}
+                className="dark:bg-green-500 dark:hover:bg-green-700 dark:text-white"
               >
                 {entry.status}
               </Button>

@@ -1,69 +1,71 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from '../supabaseClient';
-import './TimetablePage.css';
+import React, { useState, useEffect } from "react";
+import { Typography } from "@mui/material";
+import { supabase } from "../supabaseClient";
 
-const Timetable = () => {
+const Dashboard = () => {
+  const [loading, setLoading] = useState(true);
   const [timetable, setTimetable] = useState([]);
-  const [loading, setLoading] = useState(true); // For loading state
 
+  // Fetch timetable data
   useEffect(() => {
     const fetchTimetable = async () => {
       try {
         const { data, error } = await supabase
-          .from('timetable')
-          .select('*')
-          .order('day', { ascending: true });
+          .from("timetable")
+          .select("*")
+          .order("day", { ascending: true });
 
         if (error) {
-          console.error('Error fetching timetable:', error);
+          console.error("Error fetching timetable:", error);
         } else {
-          setTimetable(data); // Set the fetched data
+          setTimetable(data);
         }
       } catch (error) {
-        console.error('Error:', error);
+        console.error("Error:", error);
       } finally {
-        setLoading(false); // Set loading to false once data is fetched
+        setLoading(false);
       }
     };
 
-    fetchTimetable(); // Call the function to fetch data
-  }, []); // Empty dependency array ensures this only runs once on mount
-
-  if (loading) {
-    return <div>Loading...</div>; // Display loading state until data is fetched
-  }
+    fetchTimetable();
+  }, []);
 
   return (
-    <div className="timetable-container">
-      <h1>Timetable</h1>
-      <table className="timetable-table">
-        <thead>
-          <tr>
-            <th>Day</th>
-            <th>Time Slot</th>
-            <th>Subject</th>
-            <th>Teacher</th>
-          </tr>
-        </thead>
-        <tbody>
-          {timetable.length === 0 ? (
-            <tr>
-              <td colSpan="4">No timetable available</td>
+    <div className="p-5 dark:bg-gray-900 dark:text-white min-h-screen">
+      <Typography variant="h5" className="mb-4">Timetable</Typography>
+      
+      {loading ? (
+        <div className="text-center dark:text-gray-300">Loading...</div>
+      ) : (
+        <table className="w-full text-left border-collapse dark:bg-gray-800 dark:border-gray-700">
+          <thead>
+            <tr className="border-b dark:border-gray-600">
+              <th className="p-2 dark:text-white">Day</th>
+              <th className="p-2 dark:text-white">Time Slot</th>
+              <th className="p-2 dark:text-white">Subject</th>
+              <th className="p-2 dark:text-white">Teacher</th>
             </tr>
-          ) : (
-            timetable.map((entry) => (
-              <tr key={entry.id}>
-                <td>{entry.day}</td>
-                <td>{entry.time_slot}</td>
-                <td>{entry.subject}</td>
-                <td>{entry.teacher}</td>
+          </thead>
+          <tbody>
+            {timetable.length === 0 ? (
+              <tr>
+                <td colSpan="4" className="p-2 text-center dark:text-gray-300">No timetable available</td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              timetable.map((entry) => (
+                <tr key={entry.id} className="border-b dark:border-gray-600">
+                  <td className="p-2 dark:text-gray-300">{entry.day}</td>
+                  <td className="p-2 dark:text-gray-300">{entry.time_slot}</td>
+                  <td className="p-2 dark:text-gray-300">{entry.subject}</td>
+                  <td className="p-2 dark:text-gray-300">{entry.teacher}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };
 
-export default Timetable;
+export default Dashboard;
